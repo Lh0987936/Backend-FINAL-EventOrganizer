@@ -1,8 +1,10 @@
 <h1>Welcome to Finale Schedules</h1>
 <nav>
-    <a href="events">Home</a>
-    <a href="a_login">Admin</a>
-    <!-- if (a = z) -->
-     <a href="a_manage">Manage</a>
-     <a href="a_registrations">Registrations</a>
+    <a href="?route=event_list">Home</a>
+    <a href="?route=admin_login">Admin</a>
+    <!-- <?php if (isset($_SESSION['admin_id'])) { ?> -->
+        <a href="?route=A_event_manage">Manage</a>
+        <a href="?route=A_registrations">Registrations</a>
+    <!-- <?php } ?> -->
+
 </nav>
