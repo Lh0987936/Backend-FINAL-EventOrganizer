@@ -1,4 +1,5 @@
 <?php
+require "models/db.php";
 //CLIENT FUNCTIONS -------------------------------------
  function get_events() {
     $pdo = get_pdo();
