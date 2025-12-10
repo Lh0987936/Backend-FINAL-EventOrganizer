@@ -8,6 +8,13 @@ require "models/db.php";
     $stmt->execute();
     return $stmt->fetchAll();
  }
+ function get_event_by_id($id) {
+   $pdo = get_pdo();
+   $sql = 'SELECT * FROM events WHERE id = :id';
+   $stmt = $pdo->prepare($sql);
+   $stmt->execute([':id'=>$id]);
+   return $stmt->fetch();
+ }
  function register($event_id, $email, $name) {
     $pdo = get_pdo();
     $sql = 'INSERT INTO registrations (event_id, email, name) VALUES (:id, :email, :name);';
@@ -26,7 +33,7 @@ require "models/db.php";
  }
  function find_admin(string $username) {
     $pdo = get_pdo();
-    $sql = "SELECT * FROM `admins` WHERE username = :username";
+    $sql = "SELECT * FROM `admins` WHERE username = :u";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':u'=>$username]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);

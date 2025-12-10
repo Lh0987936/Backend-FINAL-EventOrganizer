@@ -15,14 +15,14 @@ $rows = get_events();
         <?php foreach ($rows as $row) {?>
             <tr>
             <td><?=htmlspecialchars($row['title'])?></td>
-            <td><?=htmlspecialchars($row['event_date'])?></td> <!-- Swap to display normally without the empty time... Or give them times-->
+            <td><?=htmlspecialchars($row['event_date'])?></td>
             <td><?=htmlspecialchars($row['location'])?></td>
             <td><?=htmlspecialchars($row['description'])?></td>
             <td>
                 <form method="post">
                     <input type="hidden" name="event" value="<?=$row['id']?>">
-                    <input type="hidden" name="action" value="register">
-                    <button class="btn btn-sm btn-outline-info">Register</button>
+                    <input type="hidden" name="action" value="event_register">
+                    <button type='submit' class="btn btn-sm btn-outline-info">Register</button>
                 </form>
             </td>
             </tr>

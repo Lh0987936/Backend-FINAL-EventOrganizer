@@ -28,6 +28,7 @@ function registrations_display($view) {
         include $header;
         include $nav;
         include $view;
+        include $footer;
     }
     else {
         $view = "404";
