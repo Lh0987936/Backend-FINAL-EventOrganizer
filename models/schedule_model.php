@@ -24,7 +24,7 @@ require "models/db.php";
  //ADMIN FUNCTIONS -------------------------------------
   function list_registered_by_event($event_id) {
     $pdo = get_pdo();
-    $sql = 'SELECT * FROM registrations WHERE registrations.event_id = :id;';
+    $sql = 'SELECT r.*, e.title FROM registrations AS r JOIN events AS e on r.event_id =e.id WHERE r.event_id = :id; ';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id'=>$event_id]);
     return $stmt->fetchAll(Pdo::FETCH_ASSOC); //fetches into Associative array (is the default so not technically necessary, but eases my worries lol)
@@ -45,9 +45,9 @@ require "models/db.php";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':title'=>$title, ':description'=>$description, ':location'=>$location, ':eventdate'=>$event_date]);
  }
- function edit_event(int $id, string $title, string $description, string $location, DateTime $event_date) {
+ function edit_event(int $id, string $title, string $description, string $location, $event_date) {
     $pdo = get_pdo();
-    $sql = "UPDATE events,
+    $sql = "UPDATE events
                 SET title = :title,
                 description = :description,
                 location = :location,
@@ -55,10 +55,12 @@ require "models/db.php";
                 WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
+         ':id' => $id,
         ':title' => $title,
         ':description' => $description,
-        ':eventdate' => $event_date,
-        ':location' => $location
+        ':location' => $location,
+        ':eventdate' => $event_date
+        
     ]);
     return $stmt->rowCount(); //returns rowCount so we can say "X rows changed in edit, ect ect"
  }

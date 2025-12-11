@@ -1,8 +1,9 @@
 <?php
-require_once "controllers/schedule_controller.php";
+require_once "controllers/schedule_controller.php";date_default_timezone_set('America/Chicago');
 session_start();
 $view = filter_input(INPUT_GET, 'route') ?: 'event_list';
 $action = filter_input(INPUT_POST, 'action');
+$format = 'Y-m-d H:i:s';
 $error_msg = "";
 #Need a route, action, session
 $public_views = ['event_list', 'event_register', 'event_details', 'admin_login', 'success_register'];
@@ -24,6 +25,7 @@ if (!$action && !in_array($view, $public_views, true)) {
     check_admin();
 }
 switch ($action) {
+    // PUBLIC ACTIONS ----------------------------
     case 'login':
         $username = trim((string)($_POST['username'] ?? ''));
         $password = (string)($_POST['password'] ?? '');
@@ -69,6 +71,7 @@ switch ($action) {
             $view = 'event_register';
         }
         break;
+    // PRIVATE ACTIONS ---------------------------
     case 'edit_build':
         $eventID = ($_POST['event']);
         if (!$eventID) {
@@ -77,11 +80,42 @@ switch ($action) {
             $view = 'A_edit';
         }
         break;
-    case 'Edit':
+    case 'edit':
+        $id = filter_input(INPUT_POST, 'eventID', FILTER_VALIDATE_INT);
+        $title = (string)filter_input(INPUT_POST, 'title', FILTER_UNSAFE_RAW);
+        $desc = (string)filter_input(INPUT_POST, 'desc', FILTER_UNSAFE_RAW);
+        $location = (string)filter_input(INPUT_POST, 'location', FILTER_UNSAFE_RAW);
+        $date = filter_input(INPUT_POST, 'date', FILTER_UNSAFE_RAW);
+
+        if ($id && $title !== "" && $desc !== "" && $location !== "" && $date) {
+            edit_event($id, $title, $desc, $location, $date);
+            $view = 'A_updated';
+        }
         break;
-    case 'Add':
+    case 'add':
+        $title = (string)filter_input(INPUT_POST, 'title', FILTER_UNSAFE_RAW);
+        $desc = (string)filter_input(INPUT_POST,'desc',FILTER_UNSAFE_RAW);
+        $location = (string)filter_input(INPUT_POST, 'location', FILTER_UNSAFE_RAW);
+        $date = filter_input(INPUT_POST, 'date', FILTER_UNSAFE_RAW);
+        
+        if ($title !== '' && $desc !== '' && $location !== '' && $date) {
+            add_event($title, $desc, $location, $date);
+            $view = 'A_added';
+        }
+        else {echo("Failed");}
         break;
-    case 'Delete':
+    case 'delete':
+        $deleteID = filter_input(INPUT_POST, 'event');
+        if ($deleteID) {
+            delete_event($deleteID);
+            $rows = get_events();
+        }
+        break;
+    case 'list_registered':
+        $id = filter_input(INPUT_POST, 'event', FILTER_VALIDATE_INT);
+        if ($id) {
+            $view = 'A_registrations';
+        } 
         break;
 }
 
@@ -89,15 +123,15 @@ switch ($view) {
     case 'event_list':
     case 'event_register':
     case 'event_details':
-    case 'admin_login':
     case 'success_register':
+    case 'admin_login':
     case 'A_edit':
     case 'A_add':
     case 'A_event_manage':
-        page_display($view);
-        break;
+    case 'A_added':
+    case 'A_updated':
     case 'A_registrations':
-        registrations_display($view);
+        page_display($view);
         break;
     default:
         $error_msg = "Page Not Found";
@@ -105,3 +139,4 @@ switch ($view) {
         page_display($view);
         break;
 }
+?>

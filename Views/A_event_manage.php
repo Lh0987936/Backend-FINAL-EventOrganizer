@@ -10,7 +10,8 @@ $rows = get_events();
         <th>Date</th>
         <th>Location</th>
         <th>Description</th>
-        <th>Register</th>
+        <th>Registrations</th>
+        <th>Admin Actions</th>
     </thead>
     <tbody>
         <?php foreach ($rows as $row) {?>
@@ -19,13 +20,18 @@ $rows = get_events();
             <td><?=htmlspecialchars($row['event_date'])?></td>
             <td><?=htmlspecialchars($row['location'])?></td>
             <td><?=htmlspecialchars($row['description'])?></td>
+            <td><form method='post'>
+                <input type="hidden" name="action" value = 'list_registered';>
+                <input type="hidden" name="event" value=<?= $row['id'] ?>>
+                <button type="submit" class="btn btn-sm btn-outline-info">View</button>
+            </form></td>
             <td>
                 <form method='post'>
                     <input type="hidden" name="event" value="<?=$row['id']?>">
                     <input type="hidden" name="action" value="edit_build">
                      <button type='submit' class="btn btn-sm btn-outline-warning">Edit</button>
                 </form>
-                <form method='post'>
+                <form method='post' onsubmit="return confirm('Delete this record?');">
                     <input type="hidden" name="event" value="<?=$row['id']?>">
                     <input type="hidden" name="action" value="delete">
                      <button type='submit' class="btn btn-sm btn-outline-danger">Delete</button>
@@ -35,3 +41,4 @@ $rows = get_events();
         <?php }?>
     </tbody>
 </table>
+<a href="?route=A_add" class="btn btn-sm btn-outline-success">Add</a>
