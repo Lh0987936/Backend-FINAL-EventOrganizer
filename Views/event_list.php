@@ -17,7 +17,13 @@ $rows = get_events();
             <td><?=htmlspecialchars($row['title'])?></td>
             <td><?=htmlspecialchars($row['event_date'])?></td>
             <td><?=htmlspecialchars($row['location'])?></td>
-            <td><?=htmlspecialchars($row['description'])?></td>
+            <td>
+                <form method='post'>
+                    <input type="hidden" name="event" value="<?=$row['id']?>">
+                    <input type="hidden" name="action" value="event_detail">
+                    <button type='submit' class="btn btn-sm btn-outline-secondary">Details</button>
+                </form>
+            </td>
             <td>
                 <form method="post">
                     <input type="hidden" name="event" value="<?=$row['id']?>">

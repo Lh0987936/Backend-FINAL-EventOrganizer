@@ -1,5 +1,5 @@
 <?php //Admin Event Manager
-$rows = get_events();
+$rows = get_events_for_admin();
 ?>
 <h2>Admin Dashboard</h2>
 <br>
@@ -41,4 +41,6 @@ $rows = get_events();
         <?php }?>
     </tbody>
 </table>
-<a href="?route=A_add" class="btn btn-sm btn-outline-success">Add</a>
+<div>
+<a href="?route=A_add" class="btn btn-lrg btn-success">Add</a>
+</div>

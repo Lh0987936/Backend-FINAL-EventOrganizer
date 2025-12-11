@@ -31,6 +31,13 @@ require "models/db.php";
 
     //Turn into A Group By clause
  }
+  function get_events_for_admin() { //Version to run the events list without the filtering so old events can be manually deleted (or events accidentally entered prior to today can be fixed)
+    $pdo = get_pdo();
+    $sql = 'SELECT * FROM `events`';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+ }
  function find_admin(string $username) {
     $pdo = get_pdo();
     $sql = "SELECT * FROM `admins` WHERE username = :u";

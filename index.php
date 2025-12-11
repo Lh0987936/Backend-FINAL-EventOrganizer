@@ -1,11 +1,10 @@
 <?php
-require_once "controllers/schedule_controller.php";date_default_timezone_set('America/Chicago');
+require_once "controllers/schedule_controller.php";
+date_default_timezone_set('America/Chicago');
 session_start();
 $view = filter_input(INPUT_GET, 'route') ?: 'event_list';
 $action = filter_input(INPUT_POST, 'action');
-$format = 'Y-m-d H:i:s';
-$error_msg = "";
-#Need a route, action, session
+
 $public_views = ['event_list', 'event_register', 'event_details', 'admin_login', 'success_register'];
 $public_actions = ['login', 'event_register', 'register'];
 
@@ -71,6 +70,14 @@ switch ($action) {
             $view = 'event_register';
         }
         break;
+    case 'event_detail':
+        $eventID = ($_POST['event']);
+        if (!$eventID) {
+            $view = '404';
+        } else {
+            $view = 'event_details';
+        }
+        break;
     // PRIVATE ACTIONS ---------------------------
     case 'edit_build':
         $eventID = ($_POST['event']);
@@ -102,13 +109,11 @@ switch ($action) {
             add_event($title, $desc, $location, $date);
             $view = 'A_added';
         }
-        else {echo("Failed");}
         break;
     case 'delete':
         $deleteID = filter_input(INPUT_POST, 'event');
         if ($deleteID) {
             delete_event($deleteID);
-            $rows = get_events();
         }
         break;
     case 'list_registered':
@@ -134,7 +139,6 @@ switch ($view) {
         page_display($view);
         break;
     default:
-        $error_msg = "Page Not Found";
         $view = '404';
         page_display($view);
         break;
